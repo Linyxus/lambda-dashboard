@@ -11,8 +11,216 @@
   </head>
 
   <body>
+    <div class="container">
+      <canvas id="hotGenreChart" width="400" height="150"></canvas>
+      <canvas id="topGenreChart" width="400" height="150"></canvas>
+      <canvas id="hotFilmChart" width="400" height="150"></canvas>
+      <canvas id="topFilmChart" width="400" height="150"></canvas>
+    </div>
 
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.0/chart.min.js" integrity="sha512-JxJpoAvmomz0MbIgw9mx+zZJLEvC6hIgQ6NcpFhVmbK1Uh5WynnRTTSGv3BTZMNBpPbocmdSJfldgV5lVnPtIw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+      var ctx = document.getElementById('hotGenreChart').getContext('2d');
+      var hotGenreChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+              datasets: [{
+                  label: '# of Reviews',
+                  data: [12, 19, 3, 5, 2, 3],
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Hot Genres'
+                }
+              }
+          }
+      });
+      var ctx = document.getElementById('topGenreChart').getContext('2d');
+      var topGenreChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+              datasets: [{
+                  label: 'Average Rating',
+                  data: [12, 19, 3, 5, 2, 3],
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Top Genres'
+                }
+              }
+          }
+      });
+      var ctx = document.getElementById('hotFilmChart').getContext('2d');
+      var hotFilmChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+              datasets: [{
+                  label: '# of Reviews',
+                  data: [12, 19, 3, 5, 2, 3],
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Hot Films'
+                }
+              }
+          }
+      });
+      var ctx = document.getElementById('topFilmChart').getContext('2d');
+      var topFilmChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+              datasets: [{
+                  label: 'Average Rating',
+                  data: [12, 19, 3, 5, 2, 3],
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Top Films'
+                }
+              }
+          }
+      });
+
+      function updateChart() {
+        console.log("tick!");
+
+        fetch("/api/hot_genres")
+          .then(resp => resp.json())
+          .then(resp => {
+            console.log(resp);
+            labels = []
+            data = []
+            resp.forEach(ele => {
+              labels.push(ele.genre);
+              data.push(ele.count);
+            });
+            console.log(labels);
+            console.log(data);
+            
+            hotGenreChart.data.labels = labels;
+            hotGenreChart.data.datasets.forEach((dataset) => {
+              dataset.data = data;
+            });
+
+            hotGenreChart.update();
+          });
+
+        fetch("/api/top_genres")
+          .then(resp => resp.json())
+          .then(resp => {
+            console.log(resp);
+            labels = []
+            data = []
+            resp.forEach(ele => {
+              labels.push(ele.genre);
+              data.push(ele.rating);
+            });
+            console.log(labels);
+            console.log(data);
+            
+            topGenreChart.data.labels = labels;
+            topGenreChart.data.datasets.forEach((dataset) => {
+              dataset.data = data;
+            });
+
+            topGenreChart.update();
+          });
+
+        fetch("/api/hot_films")
+          .then(resp => resp.json())
+          .then(resp => {
+            console.log(resp);
+            labels = []
+            data = []
+            resp.forEach(ele => {
+              labels.push(ele.title);
+              data.push(ele.count);
+            });
+            console.log(labels);
+            console.log(data);
+            
+            hotFilmChart.data.labels = labels;
+            hotFilmChart.data.datasets.forEach((dataset) => {
+              dataset.data = data;
+            });
+
+            hotFilmChart.update();
+          });
+
+        fetch("/api/top_films")
+          .then(resp => resp.json())
+          .then(resp => {
+            console.log(resp);
+            labels = []
+            data = []
+            resp.forEach(ele => {
+              labels.push(ele.title);
+              data.push(ele.rating);
+            });
+            console.log(labels);
+            console.log(data);
+            
+            topFilmChart.data.labels = labels;
+            topFilmChart.data.datasets.forEach((dataset) => {
+              dataset.data = data;
+            });
+
+            topFilmChart.update();
+          });
+      }
+
+      setInterval(updateChart, 1000);
+    </script>
   </body>
 </html>

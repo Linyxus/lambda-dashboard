@@ -6,7 +6,6 @@ from fastapi.staticfiles import StaticFiles
 import aioredis
 
 
-
 async def redis_conn():
     return await aioredis.create_redis('redis://localhost:6379')
 
