@@ -8,7 +8,7 @@ import aioredis
 
 
 async def redis_conn():
-    return await aioredis.create_redis('redis://lthpc-AS-4124GS-TNR:6379')
+    return await aioredis.create_redis('redis://localhost:6379')
 
 
 app = FastAPI()
